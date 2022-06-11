@@ -3,6 +3,8 @@ import 'package:shop_flutter/providers/products.dart';
 import 'package:shop_flutter/widgets/product_item.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/Product.dart';
+
 class ProductGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,9 @@ class ProductGrid extends StatelessWidget {
             childAspectRatio: 3 / 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10),
-        itemBuilder: (ctx, index) => ProductItem(products[index].id,
-            products[index].title, products[index].imageUrl));
+        itemBuilder: (ctx, index) => ChangeNotifierProvider(
+              create: (BuildContext context) => products[index],
+              child: ProductItem(),
+            ));
   }
 }
