@@ -41,10 +41,13 @@ class Products with ChangeNotifier {
   ];
 
   bool _showFavouritesOnly = false;
+
+  Products(this.authToken, this._items);
   Product findById(String id) {
     return items.firstWhere((product) => product.id == id);
   }
 
+  final String? authToken;
   List<Product> get items {
     // if (_showFavouritesOnly) {
     //   return _items.where((product) => product.isFavourite).toList();
@@ -67,8 +70,8 @@ class Products with ChangeNotifier {
   // }
 
   Future<void> fetchAndSetProducts() async {
-    const url =
-        'https://shop-flutter-db673-default-rtdb.firebaseio.com/products.json';
+    final url =
+        'https://shop-flutter-db673-default-rtdb.firebaseio.com/products.json?auth=$authToken';
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -76,7 +79,7 @@ class Products with ChangeNotifier {
       final List<Product> loadProducts = [];
       extractedData.forEach((prodId, prodKey) {
         loadProducts.add(Product(
-            id: prodId,
+            id: prodId.toString(),
             title: prodKey['title'],
             imageUrl: prodKey['imageUrl'],
             price: prodKey['price'],
